@@ -48,19 +48,39 @@ def MaxDom(soli, sarchive, R):
 def solin(x, arch):
     aux=None
     [line, col]=np.shape(arch)
-    
+    for i in range(line):
+        for j in range(col):
+            if x[i, j]=arch[i,j]:
+                aux=True
+            else:
+                aux=False
     return aux
+###########################################
+#
+#  Function to initialinzing the archive
+#
+def iniarch():
+
+
+
+    return archive
+
+
 ################ clustering function
 def cluste(archive, solarchive, HL):
     [lines, nov] =
     [lines2, nof] = 
-    newarch=np.zeros()
+    newarch=np.zeros(HL, nov)
+    newsol=np.zeros(HL,nof)
 
 
     return newarch, newsol
 
 def coannealing(Tmax, Tmin, N, SL, HL, nov, nof, alpha):
     temp=Tmax
+
+    for i in range(SL):
+        [sarchive[i, 0], sarchive[i, 1]]=fobj(archive[i])
 
     while temp> Tmin:
         for i in range(0,N):
