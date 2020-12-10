@@ -2,7 +2,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 from scipy.special import expit
+from coaf import isdomina, iarch, newsol, maxmin, delws, clust, inc, maxdom, coannealing
 
+
+def fobj(x):
+    sol = np.zeros(2)
+    sol[0] = x[0]
+    aux = 0
+    for i in range(1,29):
+        aux = aux +x[i]
+    g = 1 + 9 / 29 * aux
+    h = 1 - (sol[0] / g)**(1 / 2)
+    sol[2] = g * h
+    return sol
+
+def res(x):
+    
+    re = True
+
+    return re
 def isdomina(x_i, x_j):
     f_i = function(x_i)
     f_j = function(x_j)
@@ -13,8 +31,8 @@ def isdomina(x_i, x_j):
     for i in range(nof):
         if f_i[i] < f_j[i]:
             flagless = flagless + 1
-        elif f_j[i] == f_i[i]res= nof and flagless > 0:
-        aux = True
+        elif f_j[i] == f_i[i]  and flagless > 0:
+            aux = True
     else:
         aux = False
     return aux
@@ -209,3 +227,16 @@ def coannealing(Tmax, Tmin, N, alpha, SL, HL, nof, nov, xmax, xmin):
         #plotf(archive, 2,1)
         #archive=delws(archive, solarchive, nof)
     return archive
+
+Tmax = 100
+Tmin = 0.00001
+N = 600
+alpha = 0.85
+SL = 100
+HL = 50
+nof = 2
+nov = 30
+
+xmin = np.zeros(30)
+xmax = np.ones(30)
+archive = coannealing(Tmax, Tmin, N, alpha, SL, HL, nof, nov, xmax, xmin)
