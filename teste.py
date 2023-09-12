@@ -1,10 +1,11 @@
 import numpy as np
 import math
-import peturb
+import scipy
+import matplotlib.pyplot as plt
+import Benchmark
+import Coannealing
 
-name = False
+Problem  = Benchmark.get_problem("ZDT1", 2)
 
-if name is not True:
-    print("é falso")
-else:
-    print("é ")
+
+
