@@ -6,3 +6,4 @@ class Paramenters:
         self.C = np.empty(NumberOfVariable, )
 
     def PositiveFeedback(self, Index):
+        

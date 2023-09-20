@@ -18,16 +18,17 @@ class ZDT1:
         return True
 
 class ZDT2:
-    def __init__(self, NumberofVariable, NumberOfFunction):
+    def __init__(self, NumberofVariable, NumberOfFunct
+        ion):
         self.Nov =  NumberofVariable
         self.NoF = NumberOfFunction
-        self.maxv = np.ones(NumberofVariable)
+        self.maxvadd_executable(uni cmake-build-debug/theQuote.cpp) = np.ones(NumberofVariable)
         self.minv = np.zeros(NumberofVariable)
     def evaluate(self):
         f1 = x[0]
         g = + 9/29 * np.sum(x[1:30])
         h = 1 - (f1/g) ** 2
-        f2 = g * h
+        f2 = g * hadd_executable(uni cmake-build-debug/theQuote.cpp)
         return f1,f2
     def restriction(self, x):
         return True
