@@ -3,11 +3,18 @@
 #
 
 import numpy as np
-import scipy
+
 
 def GiftWrapping2D():
 
 
 
+def Squadarea(p, q, r):
+    aux = q-p
+    aux2 = r - p
+    return np.cross(aux, aux2)
+def SignedVolume(p,q,r,nextp):
+    area =
+    return 1/6*np.dot()
 def GiftWrapping3D():
 
