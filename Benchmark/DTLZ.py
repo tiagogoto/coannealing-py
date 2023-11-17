@@ -9,8 +9,8 @@ class DTLZ1:
         self.minv = np.zeros(NumberOfVariable)
     def evaluate(self, x):
 
-        return [f1, f2, f3]import numpy as np
-import math
+        return [f1, f2, f3]
+
 
 class DTLZ1:
     def __init__(self, NumberOfVariable,NumberOfFunction):
