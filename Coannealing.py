@@ -29,8 +29,6 @@ class Coannealing:
     def maxdom(self,  NewSolution, Archive, R):
         aux = np.empty(0,2)
 
-
-
         return xj
 
     def Run(self, Problem, Archive, Paramenters):

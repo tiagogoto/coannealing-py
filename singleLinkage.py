@@ -15,8 +15,7 @@ def Single_Linkage(solutions, fobjvalues):
                 dist_matrix[count][i] = None
             else:
                 dist_matrix[count][i] = euclidean_distance(solutions[count], solutions[i])
-                if dist_matrix[count][i] < min_dist:
-                    min_dist = dist_matrix[count][i]
+    
 
     
 

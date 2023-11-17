@@ -58,7 +58,12 @@ def SignedVolume(p,q,r,nextp):
     return 1/6*np.dot()
 
 
-#def GiftWrapping3D():
+def GiftWrapping3D():
+    
+
+
+'''
+
 archive = np.random.rand(20,2)
 
 convexhull = GiftWrapping2D(archive)
@@ -67,4 +72,4 @@ from matplotlib import pyplot as plt
 
 fig = plt.scatter(archive[:,0], archive[:,1], color='blue' )
 fig = plt.scatter(convexhull[:,0], convexhull[:,1], color='red')
-
+'''
