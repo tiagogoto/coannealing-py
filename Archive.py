@@ -1,3 +1,7 @@
+from GiftWrapping import GiftWrapping2D, GiftWrapping3D
+#from singleLinkage import Single_Linkage
+import scipy.cluster.hierarchy as shc
+
 class Archive:
   def __init__(self, Problem, Paramenters):
     self.SL = Paramenters.SL
@@ -40,20 +44,82 @@ class Archive:
         is_belongs = True
       count +=1
     return is_belongs, index
+  
   # remove an solution from Archive
   def remove_Solution(self, Index):
     np.delete(self.Solutions, Index)
     np.delete(self.FobjValues, Index)
   # clusterization algorithm function
+  def domination(solution_a, solution_b):
+    equal = 0
+    less = 0
+    larger = 0
+    for i in range(self.nof):
+      if solution_a[i] < solution_b[i]:
+        less += 1 
+      elif abs(solution_a[i] - solution_b[i]) < 10^(-3):
+        equal = equal + 1
+      else:
+        larger += 1
+    if (less + equal ) == self.nof  and larger == 0:
+      dominance = 1
+    elif (larger + less ) == nof and equal == 0:
+      dominance = 0
+    else:
+      dominance = 0
+    return dominance
+
+  def remove_remaining(to_remove, flag):
+    [lin, col] = shape(self.Solutions)
+    count = 0
+    stop = 0
+    while count < lin and stop != 1:
+      for i in range(0,lin):
+        aux = 0
+        if i != count and self.domination == 1:
+          
+
+
+
   def clusterization(self, Paramenters):
-      maxf =
+    [qtd, nof] = np.shape(self.Solutions)
+    flag = np.empty([0])
+    #find the extrme of pareto front
+    fmax = np.zeros(nof)
+    fmax[0:3] = 0
+    fmaxarg = np.zeros(3)
+    if nof < 3:
+      convhull = GiftWrapping2D(self.FobjValues)
+    else:
+      convhull = GiftWrapping3D(self.FobjValues)
+    
+    for i in range(0,qtd):
+      check_status = 0
+      for j in range(nof):
+        if self.FobjValues[i,j] > fmax[j]:
+          fmax = self.FobjValues
+          fmaxarg[j] = i
+        if self.FobjValues[i][j] == convhull[j]:
+          check_status += 1
+      if check_status == 3:
+        flag[i] = 1
+    flag[fmaxarg] = 1
+    # remove solution until reached HL
+    to_remove = qtd - self.HL
+    count  = 0
+    while count != to_remove:
+      [lin, col] = np.shape()
+      for i in range(0,)
+
+
+    
+    
+
+
+
       # first step  remove solutions out of shell
 
       # second step remove solutions from outer shell
 
       # third step remov the other solutions
 
-      
-
-      
-      

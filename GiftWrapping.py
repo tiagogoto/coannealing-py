@@ -3,6 +3,8 @@
 #
 
 import numpy as np
+from scipy.spatial import ConvexHull
+
 
 def crossproduct(point_a, point_b, point_c):
     orientation = (point_b[1] - point_a[1])*(point_c[0] - point_b[0]) \
@@ -45,10 +47,6 @@ def GiftWrapping2D(points):
 
 
     
-
-
-
-
 def Squadarea(p, q, r):
     aux = q-p
     aux2 = r - p
@@ -58,7 +56,16 @@ def SignedVolume(p,q,r,nextp):
     return 1/6*np.dot()
 
 
-def GiftWrapping3D():
+def GiftWrapping3D(points):
+    [lin, col] = np.shape(points)
+    CH = ConvexHull(points)
+    CH_points = np.empty([0, col])
+    for convex in CH.simplices:
+        CH_points = np.vstack([CH_points, convex])
+    return CH_points
+        
+
+
     
 
 
