@@ -1,4 +1,4 @@
-from GiftWrapping import GiftWrapping2D, GiftWrapping3D
+from src.Archive.GiftWrapping import GiftWrapping2D, GiftWrapping3D
 #from singleLinkage import Single_Linkage
 import scipy.cluster.hierarchy as shc
 
@@ -77,29 +77,37 @@ class Archive:
       for i in range(0,lin):
         aux = 0
         if i != count and self.domination == 1:
+          dsfsdfsd
           
-
-
-
   def clusterization(self, Paramenters):
     [qtd, nof] = np.shape(self.Solutions)
     flag = np.empty([0])
-    #find the extrme of pareto front
+    ## find the extrme of pareto front and slutions that belongs to the convexhull 
     fmax = np.zeros(nof)
     fmax[0:3] = 0
     fmaxarg = np.zeros(3)
+    new_convhull = np.empty([0, nof])
+    # get solutions in convehull 
     if nof < 3:
       convhull = GiftWrapping2D(self.FobjValues)
     else:
       convhull = GiftWrapping3D(self.FobjValues)
-    
+    [num_hull, col_hull] = np.shape(convhull)
+    for ii in range(0,num_hull):
+      for jj in range(0,num_hullhull):
+        if ii != jj:
+          if self.domination(convhull[ii], convhull[jj]):
+            new_convhull = np.vstack((new_convhull, convhull[ii]))
+
+
+    # make a flag to teh solutions in the extreme of pareto front and solution that belongs to convhull
     for i in range(0,qtd):
       check_status = 0
       for j in range(nof):
         if self.FobjValues[i,j] > fmax[j]:
           fmax = self.FobjValues
           fmaxarg[j] = i
-        if self.FobjValues[i][j] == convhull[j]:
+        if self.FobjValues[i][j] == new_convhull[j]:
           check_status += 1
       if check_status == 3:
         flag[i] = 1
@@ -109,11 +117,18 @@ class Archive:
     count  = 0
     while count != to_remove:
       [lin, col] = np.shape()
-      for i in range(0,)
+      for i in range(0,lin):
+        if count != i:
+          if self.domination(sol, solb):
 
 
     
-    
+    '''
+    [ ] develoopment of convhull only the  solution on pareto front 
+    [ ] 
+    [ ]
+    [ ]   
+    '''
 
 
 
