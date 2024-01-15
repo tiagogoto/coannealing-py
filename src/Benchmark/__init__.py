@@ -1,7 +1,8 @@
-
+from src.Benchmark.ZDT import ZDT1
+from src.Benchmark.ZDT import ZDT2
 
 def get_problem(name, *args, **kwargs):
-    name.lower()
+    name = name.lower()
 
     Problem = {
         'zdt1':ZDT1,

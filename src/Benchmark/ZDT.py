@@ -2,11 +2,13 @@ import math
 import numpy as np
 
 class ZDT1:
-    def __init__(self, NumberofVariable, NumberOfFunction):
-        self.Nov =  NumberofVariable
-        self.NoF = NumberOfFunction
-        self.maxv = np.ones(NumberofVariable)
-        self.minv = np.zeros(NumberofVariable)
+    def __init__(self, **kwargs):
+        defaultkwargs = { 'NumberofVariable':30, 'NumberofFunction':2}
+        kwargs = defaultkwargs | kwargs
+        self.Nov =  kwargs['NumberofVariable']
+        self.Nof = kwargs['NumberofFunction']
+        self.maxv = np.ones(self.Nov)
+        self.minv = np.zeros(self.Nov)
 
     def evaluate(self, x):
         f1 = x[0]
@@ -20,7 +22,7 @@ class ZDT1:
 class ZDT2:
     def __init__(self, NumberofVariable, NumberOfFunction):
         self.Nov =  NumberofVariable
-        self.NoF = NumberOfFunction
+        self.Nof = NumberOfFunction
         self.maxv = np.ones(NumberofVariable)
         self.minv = np.zeros(NumberofVariable)
     def evaluate(self):
@@ -34,7 +36,7 @@ class ZDT2:
 class ZDT3:
     def __init__(self, NumberofVariable, NumberOfFunction):
         self.Nov = NumberofVariable
-        self.NoF = NumberOfFunction
+        self.Nof = NumberOfFunction
         self.maxv = np.ones(NumberofVariable)
         self.minv = np.zeros(NumberofVariable)
     def evaluate(self, x):
