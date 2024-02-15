@@ -1,3 +1,10 @@
+import numpy as np
+
+from Archive.Archive import Archive
+from Paramenters import Paramenters
+
+
+
 class Coannealing:
     def __init__(self, Paramenters):
         self.N = Paramenters.N
