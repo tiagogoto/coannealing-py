@@ -140,6 +140,21 @@ class Archive:
       count += 1
     self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
     self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
+  
+  def select_x(self):
+    rng = np.random.default_rng()
+    ind = np.integer(0,self.size(), dtype=int)
+    aux = self.Solutions[ind].copy()
+    aux2 = self.FobjValues[ind].copy()
+    return aux, aux2
+  
+  def maxmin(self):
+    
+    for i in range(self.Nof):
+      R = np.zeros(self.Nof)
+      R[i] = self.FobjValues[:, i].max() - self.FobjValues.min()
+      return R
+  
 
 
     

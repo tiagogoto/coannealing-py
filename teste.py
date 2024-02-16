@@ -7,21 +7,30 @@ import src.Benchmark as benchmark
 import src.Archive.Archive as Archive
 from src.Archive.GiftWrapping import GiftWrapping2D
 import src.Paramenters as Paramenters
-
+from src.Coannealing import Coannealing
 
 Problem  = benchmark.get_problem(name="ZDT1", NumberofFunction=2, NumberofVariable = 30)
 paramenters = Paramenters.Paramenters(Problem, N=1000, Tmax = 300, Tmin=0.000001, SL= 200, HL=70) 
 archive = Archive.Archive(Problem, paramenters)
 
 archive.init_archive(Problem)
+[xi, ji] = archive.select_x()
 
 print(np.shape(archive.FobjValues))
+print(xi)
+coa = Coannealing(paramenters)
+
+
+#coa.maxdom()
+
+
 
 '''
 for values in archive.FobjValues:
     print(values)
 '''
 
+'''
 convhull = GiftWrapping2D(archive.FobjValues)
 
 points = archive.points_on_hull(convhull)
@@ -41,3 +50,4 @@ plt.show()
 print(np.shape(archive.FobjValues))
 
 
+'''

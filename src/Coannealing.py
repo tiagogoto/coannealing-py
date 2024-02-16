@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy.special import expit
 from Archive.Archive import Archive
 from Paramenters import Paramenters
 
@@ -33,20 +33,27 @@ class Coannealing:
         xj[ind] = xj[ind] + val
         return xj
 
-    def maxdom(self,  NewSolution, Archive, R):
-        aux = np.empty(0,2)
-
-        return xj
+    def maxdom(self, Solution, Archive, R):
+        aux = np.ones(Archive.size())
+        for i, count in zip(Archive.FobjValues, range(0,Archive.size())):
+            for j in range(Archive.Nof):
+                if Solution[j] < i[j]:
+                    aux[count] = 0
+                    break
+                elif Solution[j] - i[j] < 1*10**(-6):
+                    aux[count] = aux[count]
+                else:
+                    aux[count] = aux[count] * (Solution[j] - i[j]) * R[j]
+        return aux.max()
 
     def Run(self, Problem, Archive, Paramenters):
         Temp = Paramenters.Tmax
-        Archive.
-        xi =
-        CurrentSolution = Problem.evaluate(xi)
+        Archive.init_archive(Problem)
+        [xi, CurrentSolution] = Archive.select_x()
+        #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
             count = 0
             Paramenters.Reset()
-
             while count < Paramenters.N and count < Paramenters.N/2:
                 [xj, ind] =  nextsol(xi, Paramenters)
                 NewSolution = Problem.evaluate(xj)
