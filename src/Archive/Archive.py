@@ -85,12 +85,13 @@ class Archive:
     [lin, col] = np.shape(convhull)
     count = 0
     flag = np.empty(0, dtype=int)
+    index_points = np.empty(0, dtype=int)
     while count < lin:
       for i in range(0,lin):
         if self.domination(convhull[count], convhull[i]):
           flag = np.append(flag, i)
       count += 1
-    print(flag)
+    #print(flag)
     points = np.delete(convhull, flag, axis=0)
     return points
 
@@ -108,7 +109,7 @@ class Archive:
       convhull = GiftWrapping3D(self.FobjValues)
     ### até aqui ok
     convhull_PF = self.points_on_hull(convhull)   
-    print("convhull_PF, dentro da clusterizaçaõ", convhull_PF)
+    #print("convhull_PF, dentro da clusterizaçaõ", convhull_PF)
     # make a flag to teh solutions in the extreme of pareto front and solution that belongs to convhull
     for i in range(0,qtd):
       check_status = 0
@@ -140,22 +141,45 @@ class Archive:
       count += 1
     self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
     self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
+
+  def clusterization2(self):
+    flag = np.zeros(qtd, dtype=int)
+    fmax = np.zeros(nof)
+    fmaxarg = np.zeros(3, dtype=int)
+    # get solutions on the convexhull
+    if nof < 3:
+      convhull = GiftWrapping2D(self.FobjValues)
+    else:
+      convhull = GiftWrapping3D(self.FobjValues) 
+    convhull_PF = self.points_on_hull(convhull)
+    # Segundo o artigo as prioridades de remoção:
+    for i in range(self.Nof):
+      fmax[i] = self.FobjValues[:, i].max()
+      fmaxarg[i] = self.FobjValues[:, i].argmax()
+    flag[fmaxarg] = 1
+    for fobj, index in zip(self.FobjValues, range(0,self.size())):
+      if fobj.tolist() in convhull_PF.tolist():
+        flag[index] = 1
+    
+
+
+
   
   def select_x(self):
     rng = np.random.default_rng()
-    ind = np.integer(0,self.size(), dtype=int)
+    ind = rng.integers(0,self.size(), dtype=int)
     aux = self.Solutions[ind].copy()
     aux2 = self.FobjValues[ind].copy()
-    return aux, aux2
+    return aux, aux2, ind
   
   def maxmin(self):
-    
+    R = np.zeros(self.Nof)
     for i in range(self.Nof):
       R = np.zeros(self.Nof)
       R[i] = self.FobjValues[:, i].max() - self.FobjValues.min()
-      return R
+    return R
   
-
+  
 
     
 

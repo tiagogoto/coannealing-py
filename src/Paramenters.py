@@ -3,7 +3,7 @@ import numpy as np
 
 class Paramenters:
     def __init__(self, Problem, **kwargs):
-        defaultkwargs = {'Cmax': 20, 'N':1000, 'Tmax':300, 'Tmin':0.000000001, 'rmax':5,'SL':100, 'HL':50, 'strategy':3, 'alpha':0.95 }
+        defaultkwargs = {'Cmax': 20, 'N':1000, 'Tmax':300, 'Tmin':0.00000001, 'rmax':5,'SL':100, 'HL':50, 'strategy':3, 'alpha':0.85, 'rmax':10 }
         kwargs = defaultkwargs | kwargs
         self.Cmax = kwargs["Cmax"]
         self.Tmax = kwargs["Tmax"]
@@ -17,6 +17,7 @@ class Paramenters:
         self.strategy = kwargs["strategy"]
         self.accepted = 0
         self.rejected = 0
+        self.rmax = kwargs["rmax"]
 
     def positive_feedback(self, Index):
         if self.strategy == 1:
@@ -44,4 +45,9 @@ class Paramenters:
     def reset_paramenters(self):
         self.accepted = 0
         self.rejected = 0
+    def reset_c(self):
+        self.C.fill(1)
+
+
+    
         

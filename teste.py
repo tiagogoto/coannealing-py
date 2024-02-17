@@ -14,13 +14,16 @@ paramenters = Paramenters.Paramenters(Problem, N=1000, Tmax = 300, Tmin=0.000001
 archive = Archive.Archive(Problem, paramenters)
 
 archive.init_archive(Problem)
-[xi, ji] = archive.select_x()
+[xi, ji, ind] = archive.select_x()
 
 print(np.shape(archive.FobjValues))
 print(xi)
+print(ji)
+
 coa = Coannealing(paramenters)
 
-
+[xi ,ind] = coa.nextsol(xi, Problem, paramenters)
+print(xi)
 #coa.maxdom()
 
 

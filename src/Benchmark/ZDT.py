@@ -15,7 +15,7 @@ class ZDT1:
         g = + 9/29 * np.sum(x[1:30])
         h = 1 - math.sqrt(f1/g)
         f2 = g * h
-        return f1,f2
+        return np.array([f1,f2])
     def restriction(self, x):
         return True
 
@@ -30,7 +30,7 @@ class ZDT2:
         g = + 9/29 * np.sum(x[1:30])
         h = 1 - (f1/g) ** 2
         f2 = g * h
-        return f1,f2
+        return np.array([f1,f2])
     def restriction(self, x):
         return True
 class ZDT3:
@@ -44,7 +44,7 @@ class ZDT3:
         g = + 9/29 * np.sum(x[1:30])
         h = 1 - np.sqrt(f1/g) - (f1/g) * math.sin(10 * math.pi * f1)
         f2 = g * h
-        return f1,f2
+        return np.array([f1,f2])
     def restriction(self, x):
         return True
 

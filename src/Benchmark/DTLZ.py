@@ -16,7 +16,7 @@ class DTLZ1:
         f1 = 0.5 * x[0] * x[1] * (1 + g)
         f2 = 0.5 * x[0] * (1 - x[1]) * (1 + g)
         f3 = 0.5 * (1 - x [0]) * (1 + g)
-        return [f1, f2, f3]
+        return np.array([f1, f2, f3])
     def restriction(self, x):
         return True
 
@@ -36,7 +36,7 @@ class DTLZ2:
         f1 = 0.5 * x[0] * x[1] * (1 + g)
         f2 = 0.5 * x[0] * (1 - x[1]) * (1 + g)
         f3 = 0.5 * (1 - x [0]) * (1 + g)
-        return [f1, f2, f3]
+        return np.array([f1, f2, f3])
     def restriction(self, x):
         return True
     
@@ -56,6 +56,6 @@ class DTLZ4:
         f1 = 0.5 * x[0] * x[1] * (1 + g)
         f2 = 0.5 * x[0] * (1 - x[1]) * (1 + g)
         f3 = 0.5 * (1 - x [0]) * (1 + g)
-        return [f1, f2, f3]
+        return np.array([f1, f2, f3])
     def restriction(self, x):
         return True

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.special import expit
-from Archive.Archive import Archive
-from Paramenters import Paramenters
+from src.Archive.Archive import Archive
+from src.Paramenters import Paramenters
 
 
 
@@ -20,18 +20,21 @@ class Coannealing:
         while not status:
             val = 0
             if Paramenters.C[ind] < Paramenters.Cmax:
-                SumRand = np.sum( np.random.uniform(-1,1,Paramenters.C[ind]))
+                SumRand = np.sum( np.random.uniform(-1.0,1.0,int(Paramenters.C[ind])))
+                #print(SumRand)
                 val = SumRand/Paramenters.C[ind] * delr * ek
             else:
-                val = np.random.normal(0, expit(Paramenters.Cmax - Paramenters.C[ind] - 2)) * delr * ek
-            res = Problem.restriction()
-            aux = xj[ind] = xj[ind] + val
+                val = np.random.normal(0, expit(Paramenters.Cmax - Paramenters.C[ind] - 2.0)) * delr * ek
+            aux = xj[ind] + val
+            aux2 = xj.copy()
+            aux2[ind] += val
+            res = Problem.restriction(aux2)
             if Problem.minv[ind] < aux and aux < Problem.maxv[ind] and res:
                 status = 1
             else:
                 status =0
         xj[ind] = xj[ind] + val
-        return xj
+        return xj, ind
 
     def maxdom(self, Solution, Archive, R):
         aux = np.ones(Archive.size())
@@ -49,29 +52,52 @@ class Coannealing:
     def Run(self, Problem, Archive, Paramenters):
         Temp = Paramenters.Tmax
         Archive.init_archive(Problem)
-        [xi, CurrentSolution] = Archive.select_x()
+        [xi, CurrentSolution, ind] = Archive.select_x()
+        r_count = 0
+        aux_r =0
         #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
             count = 0
-            Paramenters.Reset()
+            Paramenters.reset_paramenters()
             while count < Paramenters.N and count < Paramenters.N/2:
-                [xj, ind] =  nextsol(xi, Paramenters)
+                [xj, ind] =  self.nextsol(xi, Problem, Paramenters)
                 NewSolution = Problem.evaluate(xj)
                 R = Archive.maxmin()
-                deltaE = self.MaxDom(NewSolution, Archive) - self.MaxDom(CurrentSolution, Archive)
+                deltaE = self.maxdom(NewSolution, Archive, R) - self.maxdom(CurrentSolution, Archive, R)
                 p = expit(-deltaE/Temp)
                 RandNumber = np.random.rand()
                 if deltaE <= 0 or RandNumber < p:
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
-                    Paramenters.PositiveFeedback()
-                    MaxDomination =
+                    #print("New solutions is accepted")
+                    Paramenters.positive_feedback(ind)
+                    MaxDomination = self.maxdom(CurrentSolution, Archive, R)
                     if MaxDomination <= 0:
-
-
+                        Archive.insert(xi, CurrentSolution)
+                        #print("new solutions was add to Archive")                       
                         if Archive.size() > Paramenters.SL:
-
+                            Archive.clusterization()
+                            [is_belongs, index] = Archive.check_if_belongs(xi)
+                            if not is_belongs:
+                                r_count += 1
+                                if r_count < Paramenters.rmax:
+                                    Archive.insert(xi, CurrentSolution)
+                                else:
+                                    [xi, CurrentSolution, ind] = Archive.select_x()
+                                    aux_r += 1
+                                    r_count = 0
+                            else:
+                                r_count = 0
+                    Paramenters.increase_accepted()        
                 else:
+                    Paramenters.negative_Feedback(ind)
+                    Paramenters.increase_rejected()
+                count += 1
+                #print(f"Count: {count}, Archive size: {Archive.size()}, Accepted: {Paramenters.accepted}")
+            print(f"Temp: {Temp}, Archive size: {Archive.size()}")
+            Temp *= Paramenters.alpha
+
+                
 
 
 
