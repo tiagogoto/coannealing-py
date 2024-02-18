@@ -16,9 +16,9 @@ archive = Archive.Archive(Problem, paramenters)
 archive.init_archive(Problem)
 [xi, ji, ind] = archive.select_x()
 
-print(np.shape(archive.FobjValues))
-print(xi)
-print(ji)
+#print(np.shape(archive.FobjValues))
+#print(xi)
+#print(ji)
 
 coa = Coannealing(paramenters)
 
@@ -33,7 +33,6 @@ for values in archive.FobjValues:
     print(values)
 '''
 
-'''
 convhull = GiftWrapping2D(archive.FobjValues)
 
 points = archive.points_on_hull(convhull)
@@ -42,15 +41,16 @@ print("shape", np.shape(convhull))
 print("após eliminar")
 print(np.shape(points))
 print(points)
-#fig1 = plt.scatter(points[:,0], points[:,1])
+fig1, axs = plt.subplot()
+fig1 = plt.scatter(convhull[:,0], convhull[:,1])
+plt.show()
+'''
 print("Clusterização")
 fig, axs = plt.subplots(3)
 fig.suptitle("antes da clusterização e depois")
 axs[0] = plt.scatter(archive.FobjValues[:, 0], archive.FobjValues[:,1])
-archive.clusterization()
+archive.clusterization2()
 axs[1] = plt.scatter(archive.FobjValues[:, 0], archive.FobjValues[:,1], color='r')
 plt.show()
 print(np.shape(archive.FobjValues))
-
-
 '''

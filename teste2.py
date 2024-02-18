@@ -9,8 +9,8 @@ from src.Archive.GiftWrapping import GiftWrapping2D
 import src.Paramenters as Paramenters
 from src.Coannealing import Coannealing
 
-Problem  = benchmark.get_problem(name="ZDT1", NumberofFunction=2, NumberofVariable = 30)
-paramenters = Paramenters.Paramenters(Problem, N=300, Tmax = 10, Tmin=0.0000000001, SL= 100, HL=50) 
+Problem  = benchmark.get_problem(name="zdt3", NumberofFunction=2, NumberofVariable = 30)
+paramenters = Paramenters.Paramenters(Problem, N=1000, Tmax = 200, Tmin=0.00000001, SL= 200, HL=70, alpha=0.95) 
 archive = Archive.Archive(Problem, paramenters)
 coa = Coannealing(paramenters)
 #Archive.init_archive(Problem)
@@ -23,7 +23,15 @@ coa = Coannealing(paramenters)
 
 coa.Run(Problem, archive, paramenters)
 
+archive.save_archive(name="zdt3")
+#paramenters.save_results(name="zdt3")
 
-fig, axs = plt.subplots()
-axs = plt.scatter(archive.FobjValues[:, 0], archive.FobjValues[:,1])
-plt.show()
+if Problem.Nof <= 2:
+    fig2, axs = plt.subplots()
+    axs = plt.scatter(archive.FobjValues[:, 0], archive.FobjValues[:,1])
+    plt.show()
+else:
+    fig2 = plt.figure()
+    axs = fig2.add_subplot(projection='3d')
+    axs = plt.scatter(archive.FobjValues[:, 0], archive.FobjValues[:,1],archive.FobjValues[:,2] )
+    plt.show()

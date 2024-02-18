@@ -1,7 +1,8 @@
 import numpy as np
 import scipy.cluster.hierarchy as shc
+from datetime import datetime
 from src.Archive.GiftWrapping import GiftWrapping2D, GiftWrapping3D
-#from singleLinkage import Single_Linkage
+from src.Archive.singleLinkage import single_linkage_a, single_linkage_b
 
 
 class Archive:
@@ -58,7 +59,7 @@ class Archive:
     less = 0
     larger = 0
     for i in range(self.Nof):
-      if solution_a[i] < solution_b[i]:
+      if solution_a[i] < solution_b[i] or abs(solution_a[i] - solution_b[i]) < 10**(-6) :
         less += 1 
       elif abs(solution_a[i] - solution_b[i]) < 10^(-3):
         equal = equal + 1
@@ -72,15 +73,23 @@ class Archive:
       dominance = 0 # if return 0, solution_a is dominated or no nondominate
     return dominance
 
-  def remove_remaining(self, to_remove, flag):
-    [lin, col] = np.shape(self.Solutions)
+  def remove_bad(self, flag):
     count = 0
     stop = 0
-    while count < lin and stop != 1:
-      for i in range(0,lin):
-        aux = 0
-        if i != count and self.domination == 1:
-          dsfsdfsd
+    to_remove = self.size() - self.HL
+    remove_index = np.empty(0, dtype=int)
+    while count != to_remove and stop == 0:
+      for i in range(0,self.size()):
+        if count != i and flag[i] == 0:
+          if self.domination(self.FobjValues[count], self.FobjValues[i]):
+            remove_index = np.append(remove_index, i)
+      if np.size(remove_index) >= to_remove or count >= self.size():
+        stop = 1
+      count += 1
+    self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
+    self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
+
+    
   def points_on_hull(self, convhull):
     [lin, col] = np.shape(convhull)
     count = 0
@@ -95,7 +104,7 @@ class Archive:
     points = np.delete(convhull, flag, axis=0)
     return points
 
-  def clusterization(self):
+  def clusterization2(self):
     [qtd, nof] = np.shape(self.FobjValues)
     flag = np.zeros(qtd, dtype=int)
     ## find the extrme of pareto front and slutions that belongs to the convexhull 
@@ -142,12 +151,12 @@ class Archive:
     self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
     self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
 
-  def clusterization2(self):
-    flag = np.zeros(qtd, dtype=int)
-    fmax = np.zeros(nof)
+  def clusterization(self):
+    flag = np.zeros(self.size(), dtype=int)
+    fmax = np.zeros(self.Nof)
     fmaxarg = np.zeros(3, dtype=int)
     # get solutions on the convexhull
-    if nof < 3:
+    if self.Nof < 3:
       convhull = GiftWrapping2D(self.FobjValues)
     else:
       convhull = GiftWrapping3D(self.FobjValues) 
@@ -160,11 +169,23 @@ class Archive:
     for fobj, index in zip(self.FobjValues, range(0,self.size())):
       if fobj.tolist() in convhull_PF.tolist():
         flag[index] = 1
+
+    self.remove_bad(flag)
+    stop = False
+    qtd_flag =  np.count_nonzero(flag == 1)
+    while self.size() > self.HL and self.size() >= qtd_flag:
+      arg = single_linkage_a(self.Solutions, self.FobjValues, flag)
+      self.FobjValues = np.delete(self.FobjValues, arg, axis=0)
+      self.Solutions = np.delete(self.Solutions, arg, axis=0)
     
+ 
+    while self.size() > self.HL and stop < 100000:
+      arg = single_linkage_b(self.Solutions, self.FobjValues, flag)
+      self.FobjValues = np.delete(self.FobjValues, arg, axis=0)
+      self.Solutions = np.delete(self.Solutions, arg, axis=0)
 
-
-
-  
+    # single-linkage com flag
+      
   def select_x(self):
     rng = np.random.default_rng()
     ind = rng.integers(0,self.size(), dtype=int)
@@ -179,6 +200,12 @@ class Archive:
       R[i] = self.FobjValues[:, i].max() - self.FobjValues.min()
     return R
   
+  def save_archive(self, name):
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    nameF = f"fobj-{name}-{dt_string}"
+    nameS = f"sol-{name}-{dt_string}"
+    np.savetxt(nameF, self.FobjValues, delimiter=',')
+    np.savetxt(nameS, self.Solutions, delimiter=',')
   
 
     

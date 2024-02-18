@@ -42,8 +42,8 @@ class Coannealing:
             for j in range(Archive.Nof):
                 if Solution[j] < i[j]:
                     aux[count] = 0
-                    break
-                elif Solution[j] - i[j] < 1*10**(-6):
+
+                elif (Solution[j] - i[j]) < 1*10**(-6):
                     aux[count] = aux[count]
                 else:
                     aux[count] = aux[count] * (Solution[j] - i[j]) * R[j]
@@ -94,8 +94,11 @@ class Coannealing:
                     Paramenters.increase_rejected()
                 count += 1
                 #print(f"Count: {count}, Archive size: {Archive.size()}, Accepted: {Paramenters.accepted}")
+            Paramenters.statistic_temp(Temp)
+            Paramenters.register_func_ite(CurrentSolution)
             print(f"Temp: {Temp}, Archive size: {Archive.size()}")
             Temp *= Paramenters.alpha
+        Paramenters.generate_plot()    
 
                 
 

@@ -1,5 +1,5 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class Paramenters:
     def __init__(self, Problem, **kwargs):
@@ -17,7 +17,14 @@ class Paramenters:
         self.strategy = kwargs["strategy"]
         self.accepted = 0
         self.rejected = 0
+        self.add_sol = 0
         self.rmax = kwargs["rmax"]
+        self.hist_accepted = np.empty(0, dtype=int)
+        self.hist_rejected = np.empty(0, dtype=int)
+        self.hist_temp = np.empty(0)
+        self.hist_add = np.empty(0,dtype=int)
+        self.hist_func_it = np.empty([0, Problem.Nof])
+        self.hist_func_temp = np.empty([0, Problem.Nof])
 
     def positive_feedback(self, Index):
         if self.strategy == 1:
@@ -42,11 +49,30 @@ class Paramenters:
         self.accepted += 1
     def increase_rejected(self):
         self.rejected +=1
+    def increase_add(self):
+        self.add_sol += 1
+    def register_func_ite(self,Fobj):
+        self.hist_func_it = np.vstack((self.hist_func_it,Fobj))
+
     def reset_paramenters(self):
         self.accepted = 0
         self.rejected = 0
+        self.add_sol = 0
     def reset_c(self):
         self.C.fill(1)
+    def statistic_temp(self, temp):
+        self.hist_temp = np.append(self.hist_temp, temp)
+        self.hist_accepted = np.append(self.hist_accepted, self.accepted)
+        self.hist_rejected = np.append(self.hist_rejected, self.rejected)
+        self.hist_add = np.append(self.hist_add, self.add_sol)
+    #def save_results(self, name):
+    def generate_plot(self):
+        fig, axs = plt.subplots(2)
+        axs[0] = plt.plot(self.hist_temp, self.hist_accepted, label="Accepted")
+        axs[0] = plt.plot(self.hist_temp, self.hist_rejected, label="Rejected")
+        plt.show()
+
+        
 
 
     
