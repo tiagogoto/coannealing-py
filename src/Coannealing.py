@@ -1,4 +1,6 @@
 import numpy as np
+from matplotlib import pyplot as plt
+import matplotlib.animation as animation
 from scipy.special import expit
 from src.Archive.Archive import Archive
 from src.Paramenters import Paramenters
@@ -36,18 +38,19 @@ class Coannealing:
         xj[ind] = xj[ind] + val
         return xj, ind
 
-    def maxdom(self, Solution, Archive, R):
+    def maxdom(self, Solution, Archive, R): # mudar esse esquema
         aux = np.ones(Archive.size())
         for i, count in zip(Archive.FobjValues, range(0,Archive.size())):
             for j in range(Archive.Nof):
                 if Solution[j] < i[j]:
                     aux[count] = 0
-
                 elif (Solution[j] - i[j]) < 1*10**(-6):
                     aux[count] = aux[count]
                 else:
                     aux[count] = aux[count] * (Solution[j] - i[j]) * R[j]
         return aux.max()
+    
+        
 
     def Run(self, Problem, Archive, Paramenters):
         Temp = Paramenters.Tmax
@@ -55,11 +58,15 @@ class Coannealing:
         [xi, CurrentSolution, ind] = Archive.select_x()
         r_count = 0
         aux_r =0
+        lista_arquivo = np.empty([0,(Problem.Nof)])
+        lista_tem_cont = np.empty([0,2])
+        lista_accpeted =  np.empty([0,Problem.Nof])
+        # matplotlib
         #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
             count = 0
             Paramenters.reset_paramenters()
-            while count < Paramenters.N and count < Paramenters.N/2:
+            while count < Paramenters.N and Paramenters.accepted < Paramenters.N/2:
                 [xj, ind] =  self.nextsol(xi, Problem, Paramenters)
                 NewSolution = Problem.evaluate(xj)
                 R = Archive.maxmin()
@@ -69,10 +76,16 @@ class Coannealing:
                 if deltaE <= 0 or RandNumber < p:
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
+                    #debug
+                    lista_accpeted = np.vstack((lista_accpeted, NewSolution))
                     #print("New solutions is accepted")
                     Paramenters.positive_feedback(ind)
                     MaxDomination = self.maxdom(CurrentSolution, Archive, R)
                     if MaxDomination <= 0:
+                        #debug
+                        
+                        lista_arquivo = np.vstack((lista_arquivo,NewSolution))
+                        
                         Archive.insert(xi, CurrentSolution)
                         #print("new solutions was add to Archive")                       
                         if Archive.size() > Paramenters.SL:
@@ -92,12 +105,18 @@ class Coannealing:
                 else:
                     Paramenters.negative_Feedback(ind)
                     Paramenters.increase_rejected()
+                    #print("solução rejeitada!")
                 count += 1
+                
                 #print(f"Count: {count}, Archive size: {Archive.size()}, Accepted: {Paramenters.accepted}")
             Paramenters.statistic_temp(Temp)
             Paramenters.register_func_ite(CurrentSolution)
             print(f"Temp: {Temp}, Archive size: {Archive.size()}")
+            #Archive.save_archive(name="zdt1")
             Temp *= Paramenters.alpha
+        #plt.ioff()
+        np.savetxt('debug.txt', lista_arquivo, delimiter=',')
+        np.savetxt('debug_accepted.txt', lista_accpeted, delimiter=",")
         Paramenters.generate_plot()    
 
                 

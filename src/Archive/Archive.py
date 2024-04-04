@@ -59,13 +59,13 @@ class Archive:
     less = 0
     larger = 0
     for i in range(self.Nof):
-      if solution_a[i] < solution_b[i] or abs(solution_a[i] - solution_b[i]) < 10**(-6) :
+      if solution_a[i] < solution_b[i] or abs(solution_a[i] - solution_b[i]) < 10**(-3) :
         less += 1 
-      elif abs(solution_a[i] - solution_b[i]) < 10^(-3):
+      elif abs(solution_a[i] - solution_b[i]) < 10^(-6):
         equal = equal + 1
       else:
         larger += 1
-    if (less + equal ) == self.Nof  and larger == 0:
+    if (less + equal ) == self.Nof and larger== 0:
       dominance = 1  # if return 1 solution_a dominate solution b
     elif (larger + less ) == self.Nof and equal == 0:
       dominance = 0
@@ -77,114 +77,84 @@ class Archive:
     count = 0
     stop = 0
     to_remove = self.size() - self.HL
+    #print(f"a serem removido: {to_remove}")
     remove_index = np.empty(0, dtype=int)
-    while count != to_remove and stop == 0:
+    while count < self.size() and stop == 0:
       for i in range(0,self.size()):
         if count != i and flag[i] == 0:
           if self.domination(self.FobjValues[count], self.FobjValues[i]):
             remove_index = np.append(remove_index, i)
-      if np.size(remove_index) >= to_remove or count >= self.size():
+      if np.size(np.unique(remove_index)) >= self.size():
         stop = 1
+      #print("count:",count)
+      #print("remove list size:", np.size(np.unique(remove_index)))
       count += 1
+      
     self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
     self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
 
     
   def points_on_hull(self, convhull):
     [lin, col] = np.shape(convhull)
+    #print(f"valor da lin: {lin} valor de col{col}")
     count = 0
     flag = np.empty(0, dtype=int)
     index_points = np.empty(0, dtype=int)
     while count < lin:
       for i in range(0,lin):
-        if self.domination(convhull[count], convhull[i]):
-          flag = np.append(flag, i)
+        #print(self.domination(convhull[count], convhull[i]))
+        if count != i:
+          if self.domination(convhull[count], convhull[i]):
+            flag = np.append(flag, i)
+            #print(f"{count} domina {i}")
+          
       count += 1
     #print(flag)
-    points = np.delete(convhull, flag, axis=0)
+    convhull = np.delete(convhull, flag, axis=0)
+    points = convhull.copy()
     return points
-
-  def clusterization2(self):
-    [qtd, nof] = np.shape(self.FobjValues)
-    flag = np.zeros(qtd, dtype=int)
-    ## find the extrme of pareto front and slutions that belongs to the convexhull 
-    fmax = np.zeros(nof)
-    fmax[0:nof] = 0
-    fmaxarg = np.zeros(3, dtype=int)
-    # get solutions in convehull 
-    if nof < 3:
-      convhull = GiftWrapping2D(self.FobjValues)
-    else:
-      convhull = GiftWrapping3D(self.FobjValues)
-    ### até aqui ok
-    convhull_PF = self.points_on_hull(convhull)   
-    #print("convhull_PF, dentro da clusterizaçaõ", convhull_PF)
-    # make a flag to teh solutions in the extreme of pareto front and solution that belongs to convhull
-    for i in range(0,qtd):
-      check_status = 0
-      for j in range(nof):
-        #print("f:" , self.FobjValues[i][j])
-        #print("fmax", fmax[j])
-        if self.FobjValues[i][j] > fmax[j]:
-          fmax[j] = self.FobjValues[i, j]
-          fmaxarg[j] = i
-        #if self.FobjValues[i,j] == convhull_PF[j]:
-          #check_status += 1
-      if self.FobjValues[i,:].tolist() in convhull_PF.tolist():#check_status == 3:
-        flag[i] = 1
-    flag[fmaxarg] = 1
-    
-    # remove solution until reached HL
-    to_remove = qtd - self.HL
-    count  = 0
-    stop = 0
-    remove_index = np.empty(0, dtype=int)
-    while count != to_remove and stop == 0:
-      [lin, col] = np.shape(self.FobjValues)
-      for i in range(0,lin):
-        if count != i and flag[i] == 0:
-          if self.domination(self.FobjValues[count], self.FobjValues[i]):
-            remove_index = np.append(remove_index, i)
-      if np.size(remove_index) >= to_remove or count >= qtd:
-        stop = 1
-      count += 1
-    self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
-    self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
+#
+# Clusterização de fato
+#
 
   def clusterization(self):
     flag = np.zeros(self.size(), dtype=int)
     fmax = np.zeros(self.Nof)
     fmaxarg = np.zeros(3, dtype=int)
     # get solutions on the convexhull
+    self.remove_bad(flag)
     if self.Nof < 3:
       convhull = GiftWrapping2D(self.FobjValues)
     else:
       convhull = GiftWrapping3D(self.FobjValues) 
     convhull_PF = self.points_on_hull(convhull)
     # Segundo o artigo as prioridades de remoção:
+    
+    
     for i in range(self.Nof):
       fmax[i] = self.FobjValues[:, i].max()
       fmaxarg[i] = self.FobjValues[:, i].argmax()
     flag[fmaxarg] = 1
+    
     for fobj, index in zip(self.FobjValues, range(0,self.size())):
       if fobj.tolist() in convhull_PF.tolist():
         flag[index] = 1
 
-    self.remove_bad(flag)
-    stop = False
+        
     qtd_flag =  np.count_nonzero(flag == 1)
     while self.size() > self.HL and self.size() >= qtd_flag:
       arg = single_linkage_a(self.Solutions, self.FobjValues, flag)
       self.FobjValues = np.delete(self.FobjValues, arg, axis=0)
       self.Solutions = np.delete(self.Solutions, arg, axis=0)
-    
- 
+    stop = 0
     while self.size() > self.HL and stop < 100000:
+      print("remoção entre todas")
       arg = single_linkage_b(self.Solutions, self.FobjValues, flag)
       self.FobjValues = np.delete(self.FobjValues, arg, axis=0)
       self.Solutions = np.delete(self.Solutions, arg, axis=0)
+      stop += 1
 
-    # single-linkage com flag
+   
       
   def select_x(self):
     rng = np.random.default_rng()
@@ -201,7 +171,8 @@ class Archive:
     return R
   
   def save_archive(self, name):
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    now = datetime.now()
+    dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
     nameF = f"fobj-{name}-{dt_string}"
     nameS = f"sol-{name}-{dt_string}"
     np.savetxt(nameF, self.FobjValues, delimiter=',')

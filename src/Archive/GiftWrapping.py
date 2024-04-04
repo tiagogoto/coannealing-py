@@ -1,7 +1,6 @@
 # Implementation of Gift Wrapping (Jarvis March algorithm) for 2D and 3D,
 # Author: Tiago G. Goto
 #
-
 import numpy as np
 from scipy.spatial import ConvexHull
 

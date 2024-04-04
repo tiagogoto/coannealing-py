@@ -1,0 +1,46 @@
+def clusterization2(self):
+    [qtd, nof] = np.shape(self.FobjValues)
+    flag = np.zeros(qtd, dtype=int)
+    ## find the extrme of pareto front and slutions that belongs to the convexhull 
+    fmax = np.zeros(nof)
+    fmax[0:nof] = 0
+    fmaxarg = np.zeros(3, dtype=int)
+    # get solutions in convehull 
+    if nof < 3:
+      convhull = GiftWrapping2D(self.FobjValues)
+    else:
+      convhull = GiftWrapping3D(self.FobjValues)
+    ### até aqui ok
+    convhull_PF = self.points_on_hull(convhull)   
+    #print("convhull_PF, dentro da clusterizaçaõ", convhull_PF)
+    # make a flag to teh solutions in the extreme of pareto front and solution that belongs to convhull
+    for i in range(0,qtd):
+      check_status = 0
+      for j in range(nof):
+        #print("f:" , self.FobjValues[i][j])
+        #print("fmax", fmax[j])
+        if self.FobjValues[i][j] > fmax[j]:
+          fmax[j] = self.FobjValues[i, j]
+          fmaxarg[j] = i
+        #if self.FobjValues[i,j] == convhull_PF[j]:
+          #check_status += 1
+      if self.FobjValues[i,:].tolist() in convhull_PF.tolist():#check_status == 3:
+        flag[i] = 1
+    flag[fmaxarg] = 1
+    
+    # remove solution until reached HL
+    to_remove = qtd - self.HL
+    count  = 0
+    stop = 0
+    remove_index = np.empty(0, dtype=int)
+    while count != to_remove and stop == 0:
+      [lin, col] = np.shape(self.FobjValues)
+      for i in range(0,lin):
+        if count != i and flag[i] == 0:
+          if self.domination(self.FobjValues[count], self.FobjValues[i]):
+            remove_index = np.append(remove_index, i)
+      if np.size(remove_index) >= to_remove or count >= self.size():
+        stop = 1
+      count += 1
+    self.FobjValues = np.delete(self.FobjValues, remove_index, axis=0)
+    self.Solutions = np.delete(self.Solutions, remove_index, axis=0)
