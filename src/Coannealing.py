@@ -65,7 +65,7 @@ class Coannealing:
         #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
             count = 0
-            Paramenters.reset_paramenters()
+            Paramenters.reset_paramenters(Problem)
             while count < Paramenters.N and Paramenters.accepted < Paramenters.N/2:
                 [xj, ind] =  self.nextsol(xi, Problem, Paramenters)
                 NewSolution = Problem.evaluate(xj)
@@ -106,11 +106,14 @@ class Coannealing:
                     Paramenters.negative_Feedback(ind)
                     Paramenters.increase_rejected()
                     #print("solução rejeitada!")
+                Paramenters.register_func_ite(CurrentSolution)
                 count += 1
+
                 
                 #print(f"Count: {count}, Archive size: {Archive.size()}, Accepted: {Paramenters.accepted}")
             Paramenters.statistic_temp(Temp)
             Paramenters.register_func_ite(CurrentSolution)
+            Paramenters.check_phase(Temp)
             print(f"Temp: {Temp}, Archive size: {Archive.size()}")
             #Archive.save_archive(name="zdt1")
             Temp *= Paramenters.alpha

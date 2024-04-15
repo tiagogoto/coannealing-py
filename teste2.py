@@ -9,8 +9,8 @@ from src.Archive.GiftWrapping import GiftWrapping2D
 import src.Paramenters as Paramenters
 from src.Coannealing import Coannealing
 
-Problem  = benchmark.get_problem(name="zdt6")
-paramenters = Paramenters.Paramenters(Problem, N=100, Tmax =10, Tmin=0.00000000001, SL= 100, HL=75,strategy=2, alpha=0.95) 
+Problem  = benchmark.get_problem(name="dtlz5")
+paramenters = Paramenters.Paramenters(Problem, N=3000, Tmax = 1000, Tmin=0.00000001, SL= 300, HL=250,strategy=3, alpha=0.95) 
 archive = Archive.Archive(Problem, paramenters)
 coa = Coannealing(paramenters)
 #Archive.init_archive(Problem)
