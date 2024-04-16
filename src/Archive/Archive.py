@@ -172,8 +172,8 @@ class Archive:
   def save_archive(self, name):
     now = datetime.now()
     dt_string = now.strftime("%d-%m-%Y-%H-%M-%S")
-    nameF = f"fobj-{name}-{dt_string}"
-    nameS = f"sol-{name}-{dt_string}"
+    nameF = f"fobj-{name}-{dt_string}-.txt"
+    nameS = f"sol-{name}-{dt_string}-.txt"
     np.savetxt(nameF, self.FobjValues, delimiter=',')
     np.savetxt(nameS, self.Solutions, delimiter=',')
   
