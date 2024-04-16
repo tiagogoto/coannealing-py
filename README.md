@@ -1,6 +1,6 @@
 # Multiobjective Optimization based on Simulated Annealing - CoAnnealing algorithm with Crystallization Factor
 
-## Implementation on Python languagem
+## Implementation on Python
 
 
 
@@ -23,8 +23,8 @@ Unconstrained Benchmark function with three objective function
 
 Benchmark function with constraints:
 
-* Binh and Korn
-* Chenkong 
+* Binh and Korn, (name='binhkorn')
+
 
 
 ## Example to run benchmark function
@@ -35,14 +35,14 @@ import src.Benchmark as benchmark
 import src.Paramenters as Paramenters
 from src.Coannealing import Coannealing
 
-Problem  = benchmark.get_problem(name="dtlz1")
-paramenters = Paramenters.Paramenters(Problem, N=1000, Tmax = 1000, Tmin=0.001, SL= 200, HL=175,strategy=3, alpha=0.95)
+Problem  = benchmark.get_problem(name="zdt1")
+paramenters = Paramenters.Paramenters(Problem, N=500, Tmax = 200, Tmin=0.00000001, SL= 100, HL=75 strategy=3, alpha=0.95)
 coannealing = Coannealing(paramenters)
 
 ```
 
 
-## Reference 
+## References 
 
 Goto, T. G. (2022). Propostas de heurísticas e estratégias de feedback aplicadas ao recozimento simulado (Doctoral dissertation, Universidade de São Paulo).
 
