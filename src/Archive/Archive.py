@@ -114,7 +114,7 @@ class Archive:
     points = convhull.copy()
     return points
 #
-# Clusterização de fato
+# Clusterização
 #
 
   def clusterization(self):
@@ -153,7 +153,6 @@ class Archive:
       self.FobjValues = np.delete(self.FobjValues, arg, axis=0)
       self.Solutions = np.delete(self.Solutions, arg, axis=0)
       stop += 1
-
    
       
   def select_x(self):
@@ -178,21 +177,6 @@ class Archive:
     np.savetxt(nameF, self.FobjValues, delimiter=',')
     np.savetxt(nameS, self.Solutions, delimiter=',')
   
-
-    
-
-       
-
-
-    
-    '''
-    [ ] develoopment of convhull only the  solution on pareto front 
-    [ ] 
-    [ ]
-    [ ]   
-    '''
-
-
 
       # first step  remove solutions out of shell
 

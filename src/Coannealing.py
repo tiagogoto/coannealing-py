@@ -58,9 +58,10 @@ class Coannealing:
         [xi, CurrentSolution, ind] = Archive.select_x()
         r_count = 0
         aux_r =0
-        lista_arquivo = np.empty([0,(Problem.Nof)])
-        lista_tem_cont = np.empty([0,2])
-        lista_accpeted =  np.empty([0,Problem.Nof])
+        # for debug
+        #lista_arquivo = np.empty([0,(Problem.Nof)])
+        #lista_tem_cont = np.empty([0,2])
+        #lista_accpeted =  np.empty([0,Problem.Nof])
         # matplotlib
         #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
@@ -77,17 +78,15 @@ class Coannealing:
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
                     #debug
-                    lista_accpeted = np.vstack((lista_accpeted, NewSolution))
+                    #ista_accpeted = np.vstack((lista_accpeted, NewSolution))
                     #print("New solutions is accepted")
                     Paramenters.positive_feedback(ind)
                     MaxDomination = self.maxdom(CurrentSolution, Archive, R)
                     if MaxDomination <= 0:
                         #debug
-                        
-                        lista_arquivo = np.vstack((lista_arquivo,NewSolution))
+                        #lista_arquivo = np.vstack((lista_arquivo,NewSolution))
                         
                         Archive.insert(xi, CurrentSolution)
-                        #print("new solutions was add to Archive")                       
                         if Archive.size() > Paramenters.SL:
                             Archive.clusterization()
                             [is_belongs, index] = Archive.check_if_belongs(xi)
@@ -115,11 +114,13 @@ class Coannealing:
             Paramenters.register_func_ite(CurrentSolution)
             Paramenters.check_phase(Temp)
             print(f"Temp: {Temp}, Archive size: {Archive.size()}")
-            #Archive.save_archive(name="zdt1")
+            
             Temp *= Paramenters.alpha
         #plt.ioff()
-        np.savetxt('debug.txt', lista_arquivo, delimiter=',')
-        np.savetxt('debug_accepted.txt', lista_accpeted, delimiter=",")
+        Archive.save_archive(name="run")
+        #for debug
+        #np.savetxt('debug.txt', lista_arquivo, delimiter=',')
+        #np.savetxt('debug_accepted.txt', lista_accpeted, delimiter=",")
         Paramenters.generate_plot()    
 
                 
