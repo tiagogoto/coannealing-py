@@ -77,12 +77,12 @@ class Coannealing:
                 RandNumber = np.random.rand()
                 if deltaE <= 0 or RandNumber < p:
                     MaxDomination = self.maxdom(NewSolution, Archive, R)
-                    print(f"currentSolution: {CurrentSolution}  -- new Solution: {NewSolution} -- maxDom: {MaxDomination}")
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
                     #debug
                     #ista_accpeted = np.vstack((lista_accpeted, NewSolution))
                     #print("New solutions is accepted")
+                    MaxDomination = self.maxdom(NewSolution, Archive, R)
                     Paramenters.positive_feedback(ind)
                     
                     if MaxDomination <= 0:

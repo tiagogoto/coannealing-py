@@ -5,7 +5,7 @@ import src.Paramenters as Paramenters
 from src.Coannealing import Coannealing
 
 Problem  = benchmark.get_problem(name="DTLZ2")
-paramenters = Paramenters.Paramenters(Problem, N=500, Tmax = 0.001, Tmin=0.00000001, SL= 100, HL=75,strategy=1, alpha=0.95) 
+paramenters = Paramenters.Paramenters(Problem, N=100, Tmax = 200, Tmin=0.00000001, SL= 100, HL=75,strategy=1, alpha=0.95) 
 archive = Archive.Archive(Problem, paramenters)
 coa = Coannealing(paramenters)
 
