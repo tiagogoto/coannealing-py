@@ -27,7 +27,7 @@ Benchmark function with constraints:
 
 
 
-## Example to run benchmark function
+## An example to execute a benchmark function
 
 ``` python
 

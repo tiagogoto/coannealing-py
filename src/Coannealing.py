@@ -21,14 +21,14 @@ class Coannealing:
         status = 0
         while not status:
             val = 0
-            if Paramenters.C[ind] < Paramenters.Cmax:
+            if Paramenters.C[ind] <= Paramenters.Cmax:
                 SumRand = np.sum( np.random.uniform(-1.0,1.0,int(Paramenters.C[ind])))
                 #print(SumRand)
                 val = SumRand/Paramenters.C[ind] * delr * ek
             else:
                 val = np.random.normal(0, expit(Paramenters.Cmax - Paramenters.C[ind] - 2.0)) * delr * ek
             aux = xj[ind] + val
-            aux2 = xj.copy()
+            aux2 = x.copy()
             aux2[ind] += val
             res = Problem.restriction(aux2)
             if Problem.minv[ind] < aux and aux < Problem.maxv[ind] and res:
@@ -44,6 +44,7 @@ class Coannealing:
             for j in range(Archive.Nof):
                 if Solution[j] < i[j]:
                     aux[count] = 0
+                    break
                 elif (Solution[j] - i[j]) < 1*10**(-6):
                     aux[count] = aux[count]
                 else:
@@ -75,13 +76,15 @@ class Coannealing:
                 p = expit(-deltaE/Temp)
                 RandNumber = np.random.rand()
                 if deltaE <= 0 or RandNumber < p:
+                    MaxDomination = self.maxdom(NewSolution, Archive, R)
+                    print(f"currentSolution: {CurrentSolution}  -- new Solution: {NewSolution} -- maxDom: {MaxDomination}")
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
                     #debug
                     #ista_accpeted = np.vstack((lista_accpeted, NewSolution))
                     #print("New solutions is accepted")
                     Paramenters.positive_feedback(ind)
-                    MaxDomination = self.maxdom(CurrentSolution, Archive, R)
+                    
                     if MaxDomination <= 0:
                         #debug
                         #lista_arquivo = np.vstack((lista_arquivo,NewSolution))

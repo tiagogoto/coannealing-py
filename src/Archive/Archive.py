@@ -165,7 +165,6 @@ class Archive:
   def maxmin(self):
     R = np.zeros(self.Nof)
     for i in range(self.Nof):
-      R = np.zeros(self.Nof)
       R[i] = self.FobjValues[:, i].max() - self.FobjValues.min()
     return R
   

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class Paramenters:
     def __init__(self, Problem, **kwargs):
-        defaultkwargs = {'Cmax': 20, 'N':1000, 'Tmax':300, 'Tmin':0.00000001, 'rmax':5,'SL':100, 'HL':50, 'strategy':3, 'alpha':0.85, 'rmax':10 }
+        defaultkwargs = {'Cmax': 20, 'N':1000, 'Tmax':300, 'Tmin':0.00000001, 'rmax':20,'SL':100, 'HL':50, 'strategy':3, 'alpha':0.85}
         kwargs = defaultkwargs | kwargs
         self.Cmax = kwargs["Cmax"]
         self.Tmax = kwargs["Tmax"]
@@ -18,7 +18,6 @@ class Paramenters:
         self.accepted = 0
         self.rejected = 0
         self.add_sol = 0
-        self.rmax = kwargs["rmax"]
         self.hist_accepted = np.empty(0, dtype=int)
         self.hist_rejected = np.empty(0, dtype=int)
         self.hist_temp = np.empty(0)
