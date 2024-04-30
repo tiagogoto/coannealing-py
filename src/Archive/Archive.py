@@ -21,10 +21,11 @@ class Archive:
   
   def init_archive(self, Problem):
     count = 0
-    aux = np.empty(self.Nov)
+    
     while count < self.SL:
+      aux = np.empty(self.Nov)
       for i in range(0,self.Nov):
-        aux[i] = Problem.minv[i] + np.random.rand() * (Problem.maxv[i] + Problem.minv[i])
+        aux[i] = Problem.minv[i] + np.random.rand() * (Problem.maxv[i] - Problem.minv[i])
       aux2 = Problem.restriction(aux)
       if aux2:
         self.Solutions = np.vstack((self.Solutions, aux))

@@ -82,7 +82,7 @@ class Coannealing:
                     #debug
                     #ista_accpeted = np.vstack((lista_accpeted, NewSolution))
                     #print("New solutions is accepted")
-                    MaxDomination = self.maxdom(NewSolution, Archive, R)
+                   
                     Paramenters.positive_feedback(ind)
                     
                     if MaxDomination <= 0:

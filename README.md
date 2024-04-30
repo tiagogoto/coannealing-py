@@ -13,6 +13,7 @@ Unconstrained Benchmark function with two objective function
 * ZDT2
 * ZDT3
 * ZDT6
+* Kursawe function (name = 'kursawe')
 
 Unconstrained Benchmark function with three objective function
 
@@ -20,10 +21,14 @@ Unconstrained Benchmark function with three objective function
 * DTLZ2
 * DTLZ5
 * DTLZ7
+* Viennet function (name = 'viennet')
 
 Benchmark function with constraints:
 
-* Binh and Korn, (name='binhkorn')
+* Binh and Korn function, (name='binhkorn')
+* Chankong and Haimes function, (name='chankong')
+* Constr-Ex problem (name= 'constrex')
+
 
 
 
@@ -40,6 +45,28 @@ paramenters = Paramenters.Paramenters(Problem, N=500, Tmax = 200, Tmin=0.0000000
 coannealing = Coannealing(paramenters)
 
 ```
+## Class for a Custom Objective Function
+For the application of CoAnneling in an optimization problem, the construction of a class for the objective function is essential. The class needs to be in the above format. 
+
+Where Nov variable is a number of variables, Nof is the number of objective functions, maxv is a numpy array containing the max values for each variable. The minv is a numpy array containing the minimum values for each variable. 
+
+The class needs to have two methods, the function evaluate that evaluate the objective functions and return numpy arrays with all objectives value. The second method, function restriction, evaluates the constraints of the objective function. The parameters must be numpy arrays with values of variables. The function returns a Boolean. If the solution satisfies the constraint, return true, and if it is not satisfied, return false.
+
+```
+class problem:
+    def __init__(self, **kwargs):
+        self.Nov = # number of variables
+        self.Nof = # number of objective functions
+        self.maxv = # a numpy.array([]) with max value for each variable 
+        self.minv = # a numpy.array([]) with minimum 
+    
+    def evaluate(x):
+        return numpy.array([f1, f2, f3])
+
+    def restriction(x):
+        return boolean
+```
+
 
 
 ## References 
