@@ -133,8 +133,8 @@ class Archive:
     
     
     for i in range(self.Nof):
-      fmax[i] = self.FobjValues[:, i].max()
-      fmaxarg[i] = self.FobjValues[:, i].argmax()
+      fmax[i] = self.FobjValues[:, i].min()
+      fmaxarg[i] = self.FobjValues[:, i].argmin()
     flag[fmaxarg] = 1
     
     for fobj, index in zip(self.FobjValues, range(0,self.size())):

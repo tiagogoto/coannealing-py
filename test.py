@@ -4,8 +4,8 @@ import src.Archive.Archive as Archive
 import src.Paramenters as Paramenters
 from src.Coannealing import Coannealing
 
-Problem  = benchmark.get_problem(name="TNK")
-paramenters = Paramenters.Paramenters(Problem, N=50, Tmax = 200, Tmin=0.00000001, SL= 100, HL=75,strategy=1, alpha=0.95) 
+Problem  = benchmark.get_problem(name="ZDT3")
+paramenters = Paramenters.Paramenters(Problem, N=500, Tmax = 200, Tmin=0.00000001, SL= 100, HL=75,strategy=3, alpha=0.95) 
 archive = Archive.Archive(Problem, paramenters)
 coa = Coannealing(paramenters)
 
