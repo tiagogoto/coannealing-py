@@ -59,12 +59,6 @@ class Coannealing:
         [xi, CurrentSolution, ind] = Archive.select_x()
         r_count = 0
         aux_r =0
-        # for debug
-        #lista_arquivo = np.empty([0,(Problem.Nof)])
-        #lista_tem_cont = np.empty([0,2])
-        #lista_accpeted =  np.empty([0,Problem.Nof])
-        # matplotlib
-        #CurrentSolution = Problem.evaluate(xi)
         while Temp > Paramenters.Tmin:
             count = 0
             Paramenters.reset_paramenters(Problem)
@@ -79,16 +73,10 @@ class Coannealing:
                     MaxDomination = self.maxdom(NewSolution, Archive, R)
                     xi = xj.copy()
                     CurrentSolution = NewSolution.copy()
-                    #debug
-                    #ista_accpeted = np.vstack((lista_accpeted, NewSolution))
-                    #print("New solutions is accepted")
                    
                     Paramenters.positive_feedback(ind)
                     
                     if MaxDomination <= 0:
-                        #debug
-                        #lista_arquivo = np.vstack((lista_arquivo,NewSolution))
-                        
                         Archive.insert(xi, CurrentSolution)
                         if Archive.size() > Paramenters.SL:
                             Archive.clusterization()

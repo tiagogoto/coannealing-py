@@ -120,8 +120,8 @@ class Archive:
 
   def clusterization(self):
     flag = np.zeros(self.size(), dtype=int)
-    fmax = np.zeros(self.Nof)
-    fmaxarg = np.zeros(3, dtype=int)
+    fmin = np.zeros(self.Nof) # the minimum value of objective function, not max
+    fminarg = np.zeros(3, dtype=int)
     # get solutions on the convexhull
     self.remove_bad(flag)
     if self.Nof < 3:
@@ -133,9 +133,9 @@ class Archive:
     
     
     for i in range(self.Nof):
-      fmax[i] = self.FobjValues[:, i].min()
-      fmaxarg[i] = self.FobjValues[:, i].argmin()
-    flag[fmaxarg] = 1
+      fmin[i] = self.FobjValues[:, i].min()
+      fminarg[i] = self.FobjValues[:, i].argmin()
+    flag[fminarg] = 1
     
     for fobj, index in zip(self.FobjValues, range(0,self.size())):
       if fobj.tolist() in convhull_PF.tolist():
@@ -166,7 +166,7 @@ class Archive:
   def maxmin(self):
     R = np.zeros(self.Nof)
     for i in range(self.Nof):
-      R[i] = self.FobjValues[:, i].max() - self.FobjValues.min()
+      R[i] = self.FobjValues[:, i].max() - self.FobjValues[:,i].min()
     return R
   
   def save_archive(self, name):

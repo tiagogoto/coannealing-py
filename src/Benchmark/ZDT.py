@@ -52,6 +52,24 @@ class ZDT3:
     def restriction(self, x):
         return True
 
+class ZDT4:
+    def __init__(self,  **kwargs):
+        defaultkwargs = { 'NumberofVariable':10, 'NumberofFunction':2}
+        kwargs = defaultkwargs | kwargs
+        self.Nov =  kwargs['NumberofVariable']
+        self.Nof = kwargs['NumberofFunction']
+        self.maxv = np.array([1,10,10,10,10,10,10,10,10,10])
+        self.minv = np.array([0,-10,-10,-10,-10,-10,-10,-10,-10,-10,-10])
+    def evaluate(self, x):
+        f1 = x[0]
+        g = 91 + np.sum(x[1:10]**2 - 10 * np.cos(4* np.pi * x[1:10]) )
+        h = 1 - np.sqrt(f1 / g)
+        f2 = g * h
+        return np.array([f1,f2])
+    def restriction(self, x):
+        return True
+
+
 class ZDT6:
     def __init__(self,  **kwargs):
         defaultkwargs = { 'NumberofVariable':10, 'NumberofFunction':2}
